@@ -4,10 +4,10 @@ import pygame                               # Imports pygame and other libraries
 import random
 pygame.init()                               # Pygame is initialised (starts running)
 #Define Classes (sprites) here
-class FallingObject(pygame.sprite.Sprite):
-    def _init_(self):
-        pygame.sprite.Sprite__init__(self)
-        self.timecreated = pygame.time.get_tickets()
+class FallingObjects(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.timecreated = pygame.time.get_ticks()
         self.image = pygame.Surface([30,30])
         self.image.set_colorkey(black)
 
@@ -16,9 +16,12 @@ class FallingObject(pygame.sprite.Sprite):
         self.react.y = 0
 
     def setImage(self,graphicSelect):
-        fallingObjectsImage = pygame.image.load(graphicSelect)
-        self.image.blit(fallingObjectsImage,(0,0))
+        FallingObjectsImage = pygame.image.load(graphicSelect)
+        self.image.blit(FallingObjectsImage,(0,0))
 
+    def moveFallingObjects(self,distance):
+        if self.rect.y <= 470:
+            self.rect.y = self.rect.y + distance
 
 screen = pygame.display.set_mode([700,500]) # Set the width and height of the screen [width,height]
 pygame.display.set_caption("Dodge")
@@ -39,10 +42,14 @@ while done == False:
             done = True                     # Flag that we are done so we exit this loop
 
     # Update sprites here
-    nextObject = FallingObject()
+    nextObject = FallingObjects()
     nextObject.setImage("Apple.png")
 
     allFallingObjects.add(nextObject)
+
+    for eachObject in (allFallingObjects.sprites()):
+        eachObject.moveFalllingObjects(5)
+
 
     screen.blit(background_image, [0,0])
     allFallingObjects.draw(screen)
@@ -50,4 +57,3 @@ while done == False:
     clock.tick(20)                          # Limit to 20 frames per second
 
 pygame.quit()                               # Close the window and quit.
-
